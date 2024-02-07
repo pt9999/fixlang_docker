@@ -27,6 +27,7 @@ RUN apt-get update \
 ENV HOME "/root"
 
 COPY --from=fix_build $HOME/.cargo/bin/fix /usr/local/bin/fix
+COPY --from=fix_build /fixlang/LICENSE /usr/local/share/doc/fixlang/LICENSE
 
 RUN chmod 0755 /usr/local/bin/fix
 
