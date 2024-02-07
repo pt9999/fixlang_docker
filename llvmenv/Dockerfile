@@ -46,7 +46,7 @@ RUN ln -s "$HOME/.cache/llvmenv/12.0.1/projects/libunwind/include/mach-o" \
 RUN llvmenv build-entry 12.0.1 -j 3
 
 #---------------------------------------------------------------------------------
-FROM ubuntu:jammy AS fix_build
+FROM ubuntu:jammy AS llvmenv
 
 USER root
 ENV USER root
@@ -60,6 +60,7 @@ RUN apt-get update \
     gcc \
     make \
     build-essential \
+    libffi-dev \
     && rm -rf /var/lib/apt/lists/*
 
 ENV HOME "/root"
@@ -71,36 +72,3 @@ COPY --from=llvmenv_build $HOME/.cargo $HOME/.cargo
 COPY --from=llvmenv_build $HOME/.rustup $HOME/.rustup
 
 ENV LLVM_SYS_120_PREFIX "$HOME/.local/share/llvmenv/12.0.1"
-
-RUN git clone https://github.com/tttmmmyyyy/fixlang.git
-
-RUN apt-get update \
-    && apt-get install -y \
-    libffi-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN cd fixlang && cargo install --locked --path .
-
-#---------------------------------------------------------------------------------
-FROM ubuntu:jammy AS fix
-
-RUN apt-get update \
-    && apt-get install -y \
-        gcc make git \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-ENV HOME "/root"
-
-COPY --from=fix_build $HOME/.cargo/bin/fix /usr/local/bin/fix
-
-RUN chmod 0755 /usr/local/bin/fix
-
-CMD [ "/bin/bash" ]
-
-#---------------------------------------------------------------------------------
-FROM fix AS fixlang_minilib
-
-RUN git clone https://github.com/pt9999/fixlang_minilib.git
-
-RUN cd fixlang_minilib && make test
