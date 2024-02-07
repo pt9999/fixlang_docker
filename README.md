@@ -10,6 +10,6 @@ Building llvmenv image takes about 4 hours. The size of llvmenv docker image is 
 ```
 llvmenv/           build docker image (pt9999/llvmenv)
 fixlang/           build docker image (pt9999/fixlang)
-fixlang_minilib/   build docker image (pt9999/fixlang)
+fixlang_minilib/   for testing of fixlang_minilib
 build_all.sh
 ```

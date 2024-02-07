@@ -1,4 +1,13 @@
+################################################################################
+# Dockerfile for llvmenv:12.0.1
+#
 # based on https://github.com/dolph/docker-image-ubuntu-rust/blob/master/docker/Dockerfile
+################################################################################
+
+#------------------------------------
+# Build llvmenv:12.0.1
+#------------------------------------
+
 FROM ubuntu:jammy AS llvmenv_build
 
 USER root
@@ -37,6 +46,10 @@ RUN cargo install llvmenv --verbose
 
 RUN llvmenv init
 RUN llvmenv entries
+
+# build llvm 12.0.1
+# NOTE: `|| true` is to recover from build error
+# NOTE: `-j 3` is to compile in parallel, but it didn't work
 RUN llvmenv build-entry 12.0.1 -j 3 || true
 
 # https://github.com/llvmenv/llvmenv/issues/115
@@ -45,7 +58,9 @@ RUN ln -s "$HOME/.cache/llvmenv/12.0.1/projects/libunwind/include/mach-o" \
 
 RUN llvmenv build-entry 12.0.1 -j 3
 
-#---------------------------------------------------------------------------------
+#----------------------------------------------
+# Create a docker image for llvmenv:12.0.1
+#----------------------------------------------
 FROM ubuntu:jammy AS llvmenv
 
 USER root
