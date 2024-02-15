@@ -8,6 +8,8 @@
 
 FROM pt9999/llvmenv:12.0.1-jammy AS fix_build
 
+ADD commit-sha /
+
 RUN git clone https://github.com/tttmmmyyyy/fixlang.git
 
 RUN cd fixlang && cargo install --locked --path .
