@@ -1,13 +1,11 @@
-# GitHub では、コミット SHA にアクションをピン留めすることが推奨されます。
-# 新しいバージョンを取得するには、SHA を更新する必要があります。
-# タグまたはブランチを参照することもできますが、アクションは警告なしに変更される可能性があります。
-
+# build and push docker image for `fixlang` and `fixlang_minilib_ci`
 name: publish
 
 on:
   workflow_dispatch:
-  release:
-    types: [published]
+  schedule:
+    - cron: '15 21 * * *'
+    #  minute(0-59), hour(0-23 UTC), day(1-31), month(1-12), dayoftheweek(0-6, 0=sunday)
 
 jobs:
   push_to_registry:
@@ -23,7 +21,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      # Dockerレイヤーキャッシュを利用
+      # Using Docker Layer Cache
       # https://dev.classmethod.jp/articles/github-actions-docker-layer-cache-enable/
       - name: Cache Docker layers
         uses: actions/cache@v2
