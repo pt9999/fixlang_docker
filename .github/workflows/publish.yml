@@ -39,6 +39,8 @@ jobs:
         with:
           images: pt9999/fixlang
           #images: my-docker-hub-namespace/my-docker-hub-repository
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Get commit-sha
         run: curl https://api.github.com/repos/tttmmmyyyy/fixlang/branches/main | jq -r '.commit.sha' > ./fixlang/commit-sha
@@ -62,6 +64,8 @@ jobs:
         with:
           images: pt9999/fixlang_minilib_ci
           #images: my-docker-hub-namespace/my-docker-hub-repository
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build and push Docker image (fixlang_minilib_ci)
         uses: docker/build-push-action@v5

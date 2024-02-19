@@ -8,6 +8,7 @@ RUN apt-get update \
 
 ENV HOME "/root"
 
+# TODO: should the tag of two images be equal? : `pt9999/fixlang:{tag}`, `pt9999/fixlang_minilib_ci:{tag}`
 COPY --from=pt9999/fixlang:latest /usr/local/bin/fix /usr/local/bin/fix
 COPY --from=pt9999/fixlang:latest /usr/local/share/doc/fixlang/LICENSE /usr/local/share/doc/fixlang/LICENSE
 COPY --from=pt9999/fixlang:latest /fixlang-revision /fixlang-revision
