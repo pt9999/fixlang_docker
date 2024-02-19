@@ -10,6 +10,7 @@ ENV HOME "/root"
 
 COPY --from=pt9999/fixlang:latest /usr/local/bin/fix /usr/local/bin/fix
 COPY --from=pt9999/fixlang:latest /usr/local/share/doc/fixlang/LICENSE /usr/local/share/doc/fixlang/LICENSE
+COPY --from=pt9999/fixlang:latest /fixlang-revision /fixlang-revision
 
 #RUN git clone https://github.com/pt9999/fixlang_minilib.git
 

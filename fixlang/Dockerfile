@@ -8,7 +8,7 @@
 
 FROM pt9999/llvmenv:12.0.1-jammy AS fix_build
 
-ADD commit-sha /
+ADD commit-sha /fixlang-revision
 
 RUN git clone https://github.com/tttmmmyyyy/fixlang.git
 
@@ -30,6 +30,7 @@ ENV HOME "/root"
 
 COPY --from=fix_build $HOME/.cargo/bin/fix /usr/local/bin/fix
 COPY --from=fix_build /fixlang/LICENSE /usr/local/share/doc/fixlang/LICENSE
+COPY --from=fix_build /fixlang-revision /fixlang-revision
 
 RUN chmod 0755 /usr/local/bin/fix
 
