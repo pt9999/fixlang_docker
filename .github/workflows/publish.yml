@@ -3,6 +3,12 @@ name: publish
 
 on:
   workflow_dispatch:
+    inputs:
+      no-cache:
+        description: "Build docker images with no cache"
+        default: false
+        required: false
+        type: boolean
   schedule:
     - cron: '15 21 * * *'
     #  minute(0-59), hour(0-23 UTC), day(1-31), month(1-12), dayoftheweek(0-6, 0=sunday)
@@ -17,7 +23,7 @@ jobs:
 
       - name: List directory
         run: ls -l
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
@@ -45,8 +51,9 @@ jobs:
           push: true
           tags: ${{ steps.meta_fixlang.outputs.tags }}
           labels: ${{ steps.meta_fixlang.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=fixlang
+          cache-to: type=gha,mode=max,scope=fixlang
+          no-cache: ${{ inputs.no-cache == true }}
 
       - name: Extract metadata (tags, labels) for Docker (fixlang_minilib_ci)
         id: meta_fixlang_minilib_ci
@@ -63,5 +70,7 @@ jobs:
           push: true
           tags: ${{ steps.meta_fixlang_minilib_ci.outputs.tags }}
           labels: ${{ steps.meta_fixlang_minilib_ci.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=fixlang_minilib_ci
+          cache-to: type=gha,mode=max,scope=fixlang_minilib_ci
+          no-cache: ${{ inputs.no-cache == true }}
+
