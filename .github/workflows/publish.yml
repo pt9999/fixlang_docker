@@ -49,6 +49,7 @@ jobs:
           context: ./fixlang
           file: ./fixlang/Dockerfile
           push: true
+          pull: true
           tags: ${{ steps.meta_fixlang.outputs.tags }}
           labels: ${{ steps.meta_fixlang.outputs.labels }}
           cache-from: type=gha,scope=fixlang
@@ -68,6 +69,7 @@ jobs:
           context: ./fixlang_minilib_ci
           file: ./fixlang_minilib_ci/Dockerfile
           push: true
+          pull: true
           tags: ${{ steps.meta_fixlang_minilib_ci.outputs.tags }}
           labels: ${{ steps.meta_fixlang_minilib_ci.outputs.labels }}
           cache-from: type=gha,scope=fixlang_minilib_ci
