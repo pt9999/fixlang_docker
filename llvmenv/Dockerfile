@@ -47,16 +47,18 @@ RUN cargo install llvmenv --verbose
 RUN llvmenv init
 RUN llvmenv entries
 
+# Compile in parallel
+ENV CMAKE_BUILD_PARALLEL_LEVEL=4
+
 # build llvm 12.0.1
 # NOTE: `|| true` is to recover from build error
-# NOTE: `-j 3` is to compile in parallel, but it didn't work
-RUN llvmenv build-entry 12.0.1 -j 3 || true
+RUN llvmenv build-entry 12.0.1 || true
 
 # https://github.com/llvmenv/llvmenv/issues/115
 RUN ln -s "$HOME/.cache/llvmenv/12.0.1/projects/libunwind/include/mach-o" \
           "$HOME/.cache/llvmenv/12.0.1/tools/lld/MachO/mach-o"
 
-RUN llvmenv build-entry 12.0.1 -j 3
+RUN llvmenv build-entry 12.0.1
 
 #----------------------------------------------
 # Create a docker image for llvmenv:12.0.1
