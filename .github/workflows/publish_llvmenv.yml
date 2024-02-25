@@ -48,6 +48,6 @@ jobs:
           tags: ${{ steps.meta_llvmenv.outputs.tags }}
           labels: ${{ steps.meta_llvmenv.outputs.labels }}
           cache-from: type=gha,scope=llvmenv
-          cache-to: type=gha,mode=max,scope=llvmenv
+          cache-to: type=gha,mode=min,scope=llvmenv
           no-cache: ${{ inputs.no-cache == true }}
 
