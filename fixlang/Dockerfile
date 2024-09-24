@@ -8,6 +8,12 @@
 
 FROM pt9999/llvmenv:12.0.1-jammy AS fix_build
 
+RUN apt-get update \
+    && apt-get install -y \
+    libssl-dev \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
 ADD commit-sha /fixlang-revision
 
 RUN git clone https://github.com/tttmmmyyyy/fixlang.git
