@@ -3,8 +3,11 @@ FROM ubuntu:jammy AS fixlang_minilib_ci
 RUN apt-get update \
     && apt-get install -y \
         gcc make git \
+        libpng-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# NOTE: libpng-dev is included for testing purpose
 
 ENV HOME "/root"
 
