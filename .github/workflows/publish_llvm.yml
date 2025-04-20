@@ -1,0 +1,53 @@
+# build and push docker image for `llvm`
+name: publish_llvm
+
+on:
+  workflow_dispatch:
+    inputs:
+      no-cache:
+        description: "Build docker images with no cache"
+        default: false
+        required: false
+        type: boolean
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: List directory
+        run: ls -la
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata (tags, labels) for Docker (llvm)
+        id: meta_llvm
+        uses: docker/metadata-action@v5
+        with:
+          images: pt9999/llvm
+          tags: |
+            type=raw,value=17.0.6-jammy,enable={{is_default_branch}}
+
+      - name: Build and push Docker image (llvm)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./llvm
+          file: ./llvm/Dockerfile
+          push: true
+          pull: true
+          tags: ${{ steps.meta_llvm.outputs.tags }}
+          labels: ${{ steps.meta_llvm.outputs.labels }}
+          cache-from: type=gha,scope=llvm
+          cache-to: type=gha,mode=min,scope=llvm
+          no-cache: ${{ inputs.no-cache == true }}
+
