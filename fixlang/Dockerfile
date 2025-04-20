@@ -6,12 +6,14 @@
 # Build fixlang
 #------------------------------------
 
-FROM pt9999/llvmenv:12.0.1-jammy AS fix_build
+FROM pt9999/llvm:17.0.6-jammy AS fix_build
 
 RUN apt-get update \
     && apt-get install -y \
     libssl-dev \
     pkg-config \
+    libtinfo-dev \
+    libxml2-dev \
     && rm -rf /var/lib/apt/lists/*
 
 ADD commit-sha /fixlang-revision
