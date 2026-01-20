@@ -3,11 +3,14 @@ FROM ubuntu:jammy AS fixlang_minilib_ci
 RUN apt-get update \
     && apt-get install -y \
         gcc make git \
+        locales \
         libpng-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # NOTE: libpng-dev is included for testing purpose
+
+RUN locale-gen en_US.UTF-8 && locale-gen ja_JP.UTF-8
 
 ENV HOME="/root"
 
