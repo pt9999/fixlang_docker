@@ -9,7 +9,7 @@ RUN apt-get update \
 
 # NOTE: libpng-dev is included for testing purpose
 
-ENV HOME "/root"
+ENV HOME="/root"
 
 # TODO: should the tag of two images be equal? : `pt9999/fixlang:{tag}`, `pt9999/fixlang_minilib_ci:{tag}`
 COPY --from=pt9999/fixlang:latest /usr/local/bin/fix /usr/local/bin/fix

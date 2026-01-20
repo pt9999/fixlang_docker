@@ -34,7 +34,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ENV HOME "/root"
+ENV HOME="/root"
 
 COPY --from=fix_build $HOME/.cargo/bin/fix /usr/local/bin/fix
 COPY --from=fix_build /fixlang/LICENSE /usr/local/share/doc/fixlang/LICENSE
