@@ -18,6 +18,8 @@ RUN apt-get update \
 
 RUN pwd && ls -l
 
+# Create commit-sha file if it doesn't exist, then add it
+RUN touch /tmp/commit-sha || true
 ADD commit-sha /fixlang-revision
 
 RUN git clone https://github.com/tttmmmyyyy/fixlang.git
