@@ -62,7 +62,7 @@ jobs:
           tags: ${{ steps.meta_fixlang.outputs.tags }}
           labels: ${{ steps.meta_fixlang.outputs.labels }}
           cache-from: type=gha,scope=fixlang
-          cache-to: type=gha,mode=max,scope=fixlang
+          cache-to: type=gha,mode=max,scope=fixlang,ignore-error=true
           no-cache: ${{ inputs.no-cache == true }}
 
       - name: Extract metadata (tags, labels) for Docker (fixlang_minilib_ci)
@@ -84,6 +84,6 @@ jobs:
           tags: ${{ steps.meta_fixlang_minilib_ci.outputs.tags }}
           labels: ${{ steps.meta_fixlang_minilib_ci.outputs.labels }}
           cache-from: type=gha,scope=fixlang_minilib_ci
-          cache-to: type=gha,mode=max,scope=fixlang_minilib_ci
+          cache-to: type=gha,mode=max,scope=fixlang_minilib_ci,ignore-error=true
           no-cache: ${{ inputs.no-cache == true }}
 
