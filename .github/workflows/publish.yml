@@ -47,10 +47,7 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Get commit-sha
-            run: |
-              mkdir -p ./fixlang
-              curl https://api.github.com/repos/tttmmmyyyy/fixlang/branches/main | jq -r '.commit.sha' > ./fixlang/commit-sha
-              cat ./fixlang/commit-sha
+        run: mkdir -p ./fixlang && curl https://api.github.com/repos/tttmmmyyyy/fixlang/branches/main | jq -r '.commit.sha' > ./fixlang/commit-sha && cat ./fixlang/commit-sha
 
       - name: List fixlang directory
         run: ls -l ./fixlang && cat ./fixlang/commit-sha
