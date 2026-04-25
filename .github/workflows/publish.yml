@@ -49,6 +49,9 @@ jobs:
       - name: Get commit-sha
         run: curl https://api.github.com/repos/tttmmmyyyy/fixlang/branches/main | jq -r '.commit.sha' > ./fixlang/commit-sha
 
+      - name: List fixlang directory
+        run: ls -l ./fixlang && cat ./fixlang/commit-sha
+
       - name: Build and push Docker image (fixlang)
         uses: docker/build-push-action@v7
         with:

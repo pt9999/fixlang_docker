@@ -16,6 +16,8 @@ RUN apt-get update \
     libxml2-dev \
     && rm -rf /var/lib/apt/lists/*
 
+RUN pwd && ls -l
+
 ADD commit-sha /fixlang-revision
 
 RUN git clone https://github.com/tttmmmyyyy/fixlang.git
