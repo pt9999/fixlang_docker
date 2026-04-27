@@ -18,8 +18,9 @@ RUN apt-get update \
 
 RUN pwd && ls -l
 
-# commit-sha ファイルがあれば保存、なければデフォルト値を設定
-RUN if [ -f commit-sha ]; then cat commit-sha > /fixlang-revision; else echo "unknown" > /fixlang-revision; fi
+# Create commit-sha file if it doesn't exist, then add it
+RUN touch /tmp/commit-sha || true
+ADD commit-sha /fixlang-revision
 
 RUN git clone https://github.com/tttmmmyyyy/fixlang.git
 
