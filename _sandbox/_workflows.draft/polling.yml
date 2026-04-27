@@ -1,0 +1,38 @@
+name: Poll External Repo and Build
+on:
+#  schedule:
+#    - cron: '0 * * * *' # 1時間に1回実行（時間は調整してください）
+  workflow_dispatch:      # 手動実行用
+
+jobs:
+  check-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 監視対象リポジトリの最新コミットハッシュを取得
+      - name: Get latest commit hash
+        id: get-hash
+        run: |
+          # git ls-remote を使えばクローンせずにハッシュだけ取得可能
+          HASH=$(git ls-remote https://github.com/tttmmmyyyy/fixlang.git HEAD | awk '{ print $1 }')
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+
+      # 2. キャッシュから「前回ビルドしたハッシュ」を復元
+      - name: Restore last hash
+        id: cache-hash
+        uses: actions/cache@v4
+        with:
+          path: last_hash.txt
+          key: last-hash-${{ steps.get-hash.outputs.hash }}
+
+      # 3. ハッシュが一致しない（キャッシュがヒットしない）場合のみ実行
+      - name: Build and Push Docker Image
+        if: steps.cache-hash.outputs.cache-hit != 'true'
+        run: |
+          echo "新しいコミットを検知しました: ${{ steps.get-hash.outputs.hash }}"
+          # ここに Docker ビルド & プッシュの処理を記述
+          # (actions/checkout で対象リポジトリをクローンしてビルドなど)
+
+      # 4. ビルド成功後、現在のハッシュをファイルに書き出す（キャッシュ保存用）
+      - name: Save current hash to file
+        if: steps.cache-hash.outputs.cache-hit != 'true'
+        run: echo "${{ steps.get-hash.outputs.hash }}" > last_hash.txt
