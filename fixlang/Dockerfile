@@ -16,11 +16,11 @@ RUN apt-get update \
     libxml2-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pwd && ls -l
+ARG COMMIT_SHA=unknown
 
-# Create commit-sha file if it doesn't exist, then add it
-RUN touch /tmp/commit-sha || true
-ADD commit-sha /fixlang-revision
+RUN pwd && ls -l && echo $COMMIT_SHA
+
+RUN echo $COMMIT_SHA > /fixlang-revision
 
 RUN git clone https://github.com/tttmmmyyyy/fixlang.git
 

@@ -46,11 +46,14 @@ jobs:
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Get commit-sha
-        run: mkdir -p ./fixlang && curl https://api.github.com/repos/tttmmmyyyy/fixlang/branches/main | jq -r '.commit.sha' > ./fixlang/commit-sha && cat ./fixlang/commit-sha
+      - name: Get latest commit hash
+        id: get-hash
+        run: |
+          HASH=$(git ls-remote https://github.com/tttmmmyyyy/fixlang.git HEAD | awk '{ print $1 }')
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
 
-      - name: List fixlang directory
-        run: ls -l ./fixlang && cat ./fixlang/commit-sha
+      #- name: Get commit-sha
+      #  run: mkdir -p ./fixlang && curl https://api.github.com/repos/tttmmmyyyy/fixlang/branches/main | jq -r '.commit.sha' > ./fixlang/commit-sha && cat ./fixlang/commit-sha
 
       - name: Build and push Docker image (fixlang)
         uses: docker/build-push-action@v7
@@ -61,6 +64,8 @@ jobs:
           pull: true
           tags: ${{ steps.meta_fixlang.outputs.tags }}
           labels: ${{ steps.meta_fixlang.outputs.labels }}
+          build-args: |
+            COMMIT_SHA=${{ steps.get-hash.outputs.hash }}
           cache-from: type=gha,scope=fixlang
           cache-to: type=gha,mode=max,scope=fixlang,ignore-error=true
           no-cache: ${{ inputs.no-cache == true }}
